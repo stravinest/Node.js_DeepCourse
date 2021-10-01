@@ -1,0 +1,29 @@
+{
+  "name": "node.js_deepcourse",
+  "version": "1.0.0",
+  "description": "노드 게시판 심화과정 댓글기능 로그인 회원가입 구현",
+  "main": "app.js",
+  "scripts": {
+    "prettify": "prettier --write *.js **/*.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stravinest/Node.js_DeepCourse.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/stravinest/Node.js_DeepCourse/issues"
+  },
+  "homepage": "https://github.com/stravinest/Node.js_DeepCourse#readme",
+  "devDependencies": {
+    "jest": "^27.2.4"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "mysql2": "^2.3.0",
+    "sequelize": "^6.6.5",
+    "sequelize-cli": "^6.2.0"
+  }
+}
