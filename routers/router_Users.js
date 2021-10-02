@@ -1,38 +1,59 @@
 const express = require('express');
-const loginMiddleware = require('../middlewares/login-middleware');
-const { Post } = require('../models');
+const { User } = require('../models');
 const router = express.Router();
 
-//개시글 생성
-router.post('/',loginMiddleware, async (req, res) => {
+// 회원가입
+router.post('/', async (req, res) => {
   try {
-    const {  boardPwd, content } = req.body;
-    const {nickName} =res.locals.user;
-
-    await Post.create({ nickName,boardPwd, content });
-    res.send({ result: '게시글을 생성하였습니다.' });
+    const { nickname, password, passwordConfirm } = req.body;
+    const isExist = await User.findOne({where : {nickname} });
+    if (isExist===null) {
+      let includeTest = true;
+      let str = [];
+      str = password;
+      for (let i = 0; i < str.length; i++) {
+        if (nickname.includes(str[i])) {
+          includeTest = false;
+          console.log(str[i]);
+        }
+      }
+      if (
+        /[a-zA-Z0-9]{3,}/gm.test(nickname) &&
+        password === passwordConfirm &&
+        password.length >= 4 &&
+        includeTest
+      ) {
+        await User.create({ nickname, password, passwordConfirm });
+        res.send({ result: '회원가입성공' });
+      } else {
+        res.send({ result: '회원가입실패' });
+      }
+    } else {
+      console.log('존재하는 아이디 입니다.');
+      res.send(error);
+    }
   } catch (error) {
-    console.log(`${req.method} ${req.originalUrl} : ${error.message}`);
-    res.status(400).send();
+    console.log(`${req.method}실패인가 ${req.originalUrl} : ${error.message}`);
+    res.status(40).send();
   }
 });
 
 // // 모든 게시글 데이터를 반환하는 함수
 // router.get("/", async (req, res) => {
-//   try {
-//       let jsonData = await Post.find().sort({createdAt: -1});
-//       for (let x in jsonData) {
-//           const createdAt = new Date(jsonData[x]["createdAt"]);
-//           const create_date = `${createdAt.getFullYear()}-${
-//               createdAt.getMonth() + 1
-//           }-${createdAt.getDate()} ${createdAt.getHours()}:${createdAt.getMinutes()}:${createdAt.getSeconds()}`;
-//           jsonData[x]["createdAt"] = create_date;
-//       }
-//       res.send({result: jsonData});
-//   } catch (error) {
-//       console.log(`${req.method} ${req.originalUrl} : ${error.message}`);
-//       res.status(400).send();
-//   }
+//     try {
+//         let jsonData = await Post.find().sort({createdAt: -1});
+//         for (let x in jsonData) {
+//             const createdAt = new Date(jsonData[x]["createdAt"]);
+//             const create_date = `${createdAt.getFullYear()}-${
+//                 createdAt.getMonth() + 1
+//             }-${createdAt.getDate()} ${createdAt.getHours()}:${createdAt.getMinutes()}:${createdAt.getSeconds()}`;
+//             jsonData[x]["createdAt"] = create_date;
+//         }
+//         res.send({result: jsonData});
+//     } catch (error) {
+//         console.log(`${req.method} ${req.originalUrl} : ${error.message}`);
+//         res.status(400).send();
+//     }
 // });
 
 // //게시글 수정

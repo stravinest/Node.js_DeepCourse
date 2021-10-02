@@ -21,8 +21,10 @@
     "jest": "^27.2.4"
   },
   "dependencies": {
+    "bulma": "^0.9.3",
     "ejs": "^3.1.6",
     "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
     "mysql2": "^2.3.0",
     "sequelize": "^6.6.5",
     "sequelize-cli": "^6.2.0"

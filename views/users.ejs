@@ -7,8 +7,6 @@
       name="viewport"
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
     />
-    <link rel="icon" href="/static/favicon.ico" type="image/x-icon" />
-    <link rel="shortcut icon" href="/static/favicon.ico" type="image/x-icon" />
     <!-- Bootstrap CSS -->
     <link
       rel="stylesheet"
@@ -49,64 +47,37 @@
 
     <title>CRUD 주특기 심화과제</title>
     <script>
-      // Html 파일이 전부 로딩되었을 경우 실행
-      // if (localStorage.getItem('token')) {
-      //   getSelf(function () {
-      //     alert('이미 로그인이 되어있습니다. ');
-      //     window.location.href = '/board';
-      //   });
-      // }
-
-      // function getSelf(callback) {
-      //   $.ajax({
-      //     type: 'GET',
-      //     url: '/api/users/me',
-      //     headers: {
-      //       authorization: `Bearer ${localStorage.getItem('token')}`,
-      //     },
-      //     success: function (response) {
-      //       callback(response.user);
-      //     },
-      //     error: function (xhr, status, error) {
-      //       if (status == 401) {
-      //         alert('로그인이 필요합니다.');
-      //       } else {
-      //         localStorage.clear();
-      //         alert('알 수 없는 문제가 발생했습니다. 관리자에게 문의하세요.');
-      //       }
-      //       window.location.href = '/';
-      //     },
-      //   });
-      // }
-
-      function login() {
+      //
+      function post() {
         const nickname = $('#nickname').val();
         const password = $('#pwd').val();
+        const passwordConfirm = $('#pwdconfirm').val();
+
+       
         $.ajax({
           type: 'POST',
-          url: '/api/login',
-          data: { nickname, password },
+          url: '/api/users',
+          data: { nickname, password, passwordConfirm },
           success: function (response) {
-            localStorage.setItem('token', response.token);
-            console.log(response.token);
-            alert('로그인 성공');
-            window.location.href = '/board';
+            alert(response.result);
+            if(response.result==='회원가입성공'){
+             window.location.href = '/';
+            }
           },
           error: function (error) {
-            alert('닉네임또는 패스워드를 확인해주세요');
-            customAlert(error.responseJSON.errorMessage);
+            console.error(error);
+            alert('아이디가 존재합니다.');
+            //window.location.href = '/';
           },
         });
         // window.location.href = './board';
       }
-
-      users = () => (window.location.href = './users');
+      canser = () => {};
     </script>
     <style>
       .card {
         cursor: pointer;
       }
-
       html {
         overflow: auto;
       }
@@ -120,7 +91,7 @@
   <body>
     <section class="hero is-info">
       <div class="hero-body">
-        <p class="title">로그인 페이지</p>
+        <p class="title">회원가입 페이지</p>
         <p class="subtitle"></p>
       </div>
     </section>
@@ -129,22 +100,37 @@
       <div class="form-group">
         <label for="exampleInputEmail1">닉네임</label>
         <input
-          type="email"
+          type="text"
           class="form-control"
           id="nickname"
-          aria-describedby="emailHelp"
+          placeholder="Enter nickname"
         />
       </div>
       <div class="form-group">
         <label for="exampleInputPassword1">Password</label>
-        <input type="password" class="form-control" id="pwd" />
+        <input
+          type="password"
+          class="form-control"
+          id="pwd"
+          placeholder="Password"
+        />
       </div>
-      <div class="form-check"></div>
-      <button type="submit" class="btn btn-primary" onclick="login()">
-        로그인
-      </button>
-      <button type="submit2" class="btn btn-primary" onclick="users()">
+
+      <div class="form-group">
+        <label for="exampleInputPassword1">PasswordConfirm</label>
+        <input
+          type="password"
+          class="form-control"
+          id="pwdconfirm"
+          placeholder="PasswordConfirm"
+        />
+      </div>
+
+      <button type="submit2" class="btn btn-primary" onclick="post()">
         회원가입
+      </button>
+      <button type="submit2" class="btn btn-primary" onclick="cancer()">
+        취소
       </button>
     </div>
   </body>
