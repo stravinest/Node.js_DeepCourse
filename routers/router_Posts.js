@@ -1,16 +1,32 @@
 const express = require('express');
 const loginMiddleware = require('../middlewares/login-middleware');
-const { Post } = require('../models');
+const { Post,Comment } = require('../models');
 const router = express.Router();
 
 //개시글 생성
-router.post('/',loginMiddleware, async (req, res) => {
+router.post('/', loginMiddleware, async (req, res) => {
   try {
-    const {  boardPwd, content } = req.body;
-    const {nickName} =res.locals.user;
+    const { password, content } = req.body;
+   
+    const { nickname } = res.locals.user;
 
-    await Post.create({ nickName,boardPwd, content });
+    await Post.create({ nickname, password, content });
     res.send({ result: '게시글을 생성하였습니다.' });
+  } catch (error) {
+    console.log(`${req.method} ${req.originalUrl} : ${error.message}`);
+    res.status(400).send();
+  }
+});
+
+//댓글 생성
+router.post('/comment', loginMiddleware, async (req, res) => {
+  try {
+    const { comment } = req.body;
+   
+    const { nickname } = res.locals.user;
+
+    await Comment.create({ nickname, comment });
+    res.send({ result: '댓글을 생성하였습니다.' });
   } catch (error) {
     console.log(`${req.method} ${req.originalUrl} : ${error.message}`);
     res.status(400).send();

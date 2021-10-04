@@ -44,9 +44,15 @@
     ></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.4.0/socket.io.js"></script>
-
+    <script src="/api.js"></script>
     <title>CRUD 주특기 심화과제</title>
     <script>
+      if (localStorage.getItem('token')) {
+        getSelf(function () {
+          alert('이미 로그인이 되어있습니다. ');
+          window.location.href = '/board';
+        });
+      }
       //
       function post() {
         const nickname = $('#nickname').val();
