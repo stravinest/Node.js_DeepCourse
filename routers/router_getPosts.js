@@ -30,8 +30,8 @@ router.get('/not_login', async (req, res) => {
 router.get('/comment', loginMiddleware, async (req, res) => {
   try {
     let jsonData = await Comment.findAll({order:[['createdAt','DESC']]});
-    //const { nickname } = res.locals.user;
-    res.send({ result: jsonData });
+    const { nickname } = res.locals.user;
+    res.send({ result: jsonData, nickname:nickname});
   } catch (error) {
     console.log(`${req.method} ${req.originalUrl} : ${error.message}`);
     res.status(400).send();

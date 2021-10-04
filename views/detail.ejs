@@ -61,9 +61,9 @@
         }
       });
 
-      //   // Posts를 가져온다.
+      //   // 로그인일때 댓글가져오기
       function get_details() {
-        $('#card-box').empty(); // 상품창의 리스트를 삭제한다.
+        $('#card-box').empty(); //
         $.ajax({
           type: 'GET',
           url: `/api/getPosts/comment`,
@@ -72,18 +72,25 @@
           },
           success: function (response) {
             let comments = response['result'];
+            const logedNickname = response['nickname'];
+            console.log(logedNickname)
             for (let i = 0; i < comments.length; i++) {
               const nickname = comments[i]['nickname'];
               const comment = comments[i]['comment'];
               const id = comments[i]['id'];
+              if(nickname===logedNickname){
               make_post(nickname, comment, id);
+              }
+              else{
+              make_post_not_loged(nickname, comment, id);  
+              }
             }
           },
         });
       }
-      //    // 비로그인일때
+      //    // 비로그인일때 댓글가져오기
       function not_login_get_details() {
-        $('#card-box').empty(); // 상품창의 리스트를 삭제한다.
+        $('#card-box').empty(); // .
         $.ajax({
           type: 'GET',
           url: `/api/getPosts/not_login_comment`,
@@ -94,7 +101,7 @@
               const nickname = posts[i]['nickname'];
               const comment = posts[i]['comment'];
               const id = posts[i]['id'];
-              make_post(nickname, comment, id);
+              make_post_not_loged(nickname, comment, id);
             }
           },
         });
@@ -105,17 +112,29 @@
         let temp_html = `
           <div class="commentWidth alert alert-warning alert-dismissible fade show" role="alert">
       <strong>${nickname}</strong> ${comment}
-      <button type="button" class="close" >
-        <span aria-hidden="true">&times;</span>
+      <input type ="text" value="${comment}"><button type="button" onclick="modifyComment(${id})" >
+       수정
       </button>
-    </div>`;
+      <button type="button" onclick ="deleteComment(${id})" >삭제</button>
+    </div><br>`;
+        $('#card-box').append(temp_html);
+      }
+        //댓글 아이디가 다를때 
+      function make_post_not_loged(nickname, comment, id) {
+        let temp_html = `
+          <div class="commentWidth alert alert-warning alert-dismissible fade show" role="alert">
+      <strong>${nickname}</strong> ${comment}
+    </div><br>`;
         $('#card-box').append(temp_html);
       }
 
+
+
       function posting() {
-        const nickname = $('#nickname').val();
+      //  const nickname = $('#nickname').text();
         const comment = $('#comment').val();
-        console.log(nickname);
+        if(comment!==""){
+        
         console.log(comment);
         $.ajax({
           type: 'POST',
@@ -123,21 +142,50 @@
           headers: {
             authorization: `Bearer ${localStorage.getItem('token')}`,
           },
-          data: { nickname, comment },
+          data: { comment },
           success: function (response) {
             alert(response.result);
             window.location.reload();
           },
           error: function (error) {
-            console.error(error);
-            alert('아이디가 존재합니다.');
-            //window.location.href = '/';
+            alert('로그인이 필요합니다.!');
+            window.location.href = '/';
           },
         });
+      }else{
+        alert("내용을 입력해주세요")
       }
+      }
+
+      function modifyComment(id){
+        
+        console.log(id);
+
+      }
+      function deleteComment(id){
+        $.ajax({
+    type: 'DELETE',
+    url: `/api/goods/${goodsId}/cart`,
+    headers: {
+      authorization: `Bearer ${localStorage.getItem('token')}`,
+    },
+    success: function () {
+      callback();
+    },
+  });
+      }
+
     </script>
 
     <style>
+      .Dposition{
+        position: absolute;
+        right: 10px;
+      }
+      .Mposition{
+        position: absolute;
+        right: 50px;
+      }
       .card {
         cursor: pointer;
       }
@@ -161,6 +209,7 @@
       }
       .commentWidth {
         width: 600px;
+       
         margin: auto;
       }
     </style>
@@ -197,9 +246,11 @@
         role="alert"
       >
         <strong>작성자</strong> 댓글내용
-        <button type="button" class="close">
-          <span aria-hidden="true">&times;</span>
-        </button>
+        <!-- <button type="button" class="open"> -->
+        <!-- <button type="button" class="open"></button> -->
+        <!-- <button type="button" class="close">
+          <!-- <span aria-hidden="true">&times;</span> -->
+        </button> -->
       </div>
     </div>
   </body>
