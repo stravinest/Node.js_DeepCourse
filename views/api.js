@@ -15,20 +15,6 @@ function getSelf(callback) {
   });
 }
 
-function getGoods(category, callback) {
-  $('#goodsList').empty();
-  $.ajax({
-    type: 'GET',
-    url: `/api/goods${category ? '?category=' + category : ''}`,
-    headers: {
-      authorization: `Bearer ${localStorage.getItem('token')}`,
-    },
-    success: function (response) {
-      callback(response['goods']);
-    },
-  });
-}
-
 function signOut() {
   localStorage.clear();
   alert('로그아웃!');

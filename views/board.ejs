@@ -145,12 +145,11 @@
       // 가져온 Posts를 Table Rows로 삽입한다.
       function make_post(nickname, content, id) {
         let temp_html = `
-        <div class="card wrap" onclick="location.href='/detail/${id}'">
+        <div class="card wrap" onclick="location.href='/detail?id=${id}'">
       <div class="card-header">${nickname}</div>
       <div class="card-body">
         <p class="card-text">${content}</p>
-        <a href="#" class="btn btn-primary location">수정</a>
-        <a href="#" class="btn btn-primary">댓글쓰기</a>
+        
       </div>
     </div>`;
         $('#card-box').append(temp_html);

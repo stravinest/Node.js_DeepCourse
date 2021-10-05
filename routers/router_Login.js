@@ -14,22 +14,19 @@ router.post('/', async (req, res) => {
       },
     });
 
-    if(!user || password !==user.password ){
+    if (!user || password !== user.password) {
       res.status(400).send({
-        errorMessage:"이메일또는 패스워드가 틀렸습니다.",
+        errorMessage: '이메일또는 패스워드가 틀렸습니다.',
       });
       return;
     }
     res.send({
-      token: jwt.sign({ id: user.id }, "stravinest-secret-key"),
-      
+      token: jwt.sign({ id: user.id }, process.env.SECRET_KEY),
     });
-   
   } catch (error) {
     console.log(`${req.method}실패인가 ${req.originalUrl} : ${error.message}`);
     res.status(40).send();
   }
 });
-
 
 module.exports = router;

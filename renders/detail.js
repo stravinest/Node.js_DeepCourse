@@ -3,9 +3,9 @@ const {Post} = require('../models');
 const router = express.Router();
 
 // 게시글 조회 페이지
-router.get('/:id', async (req, res) => {
+router.get('/', async (req, res) => {
   try {
-    const { id } = req.params;
+    const { id } = req.query;
     const isExist = await Post.findOne({
       where: {
         id: Number(id),

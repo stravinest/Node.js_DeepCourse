@@ -1,257 +1,281 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, shrink-to-fit=no"
-    />
-    <!-- Bootstrap CSS -->
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
-      integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2"
-      crossorigin="anonymous"
-    />
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8"/>
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+        <!-- Bootstrap CSS -->
+        <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
+            integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2"
+            crossorigin="anonymous"/>
 
-    <!-- Font Awesome CSS -->
-    <link
-      href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
-      rel="stylesheet"
-    />
-    <!--벌마 -->
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css"
-    />
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script
-      src="https://code.jquery.com/jquery-3.5.1.js"
-      integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
-      integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js"
-      integrity="sha384-w1Q4orYjBQndcko6MimVbzY0tgp4pWB4lZ7lr30WKz0vr/aWKhXdBNmNb5D92v7s"
-      crossorigin="anonymous"
-    ></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.4.0/socket.io.js"></script>
-    <title>CRUD 주특기 심화과제</title>
-    <script src="/api.js"></script>
-    <script>
-      // let user; //전역변수 user 선언
-      // getSelf(function (u) {
-      //   user = u;
-      //   console.log(user);
-      // });
+        <!-- Font Awesome CSS -->
+        <link
+            href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+            rel="stylesheet"/>
+        <!--벌마 -->
+        <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css"/>
+        <!-- Optional JavaScript -->
+        <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+        <script
+            src="https://code.jquery.com/jquery-3.5.1.js"
+            integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+            crossorigin="anonymous"></script>
+        <script
+            src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+            integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+            crossorigin="anonymous"></script>
+        <script
+            src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js"
+            integrity="sha384-w1Q4orYjBQndcko6MimVbzY0tgp4pWB4lZ7lr30WKz0vr/aWKhXdBNmNb5D92v7s"
+            crossorigin="anonymous"></script>
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
+        <script
+            src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.4.0/socket.io.js"></script>
+        <title>CRUD 주특기 심화과제</title>
+        <script src="/api.js"></script>
+        <script>
+            const queryString = window.location.search;
+            const urlParams = new URLSearchParams(queryString);
+            const postId = urlParams.get("id");
 
-      $(document).ready(function () {
-        if (localStorage.getItem('token')) {
-          get_details();
-        } else {
-          not_login_get_details();
-        }
-      });
+            $(document).ready(function () {
+                if (localStorage.getItem('token')) {
+                    get_details();
+                } else {
+                    not_login_get_details();
+                }
+            });
 
-      //   // 로그인일때 댓글가져오기
-      function get_details() {
-        $('#card-box').empty(); //
-        $.ajax({
-          type: 'GET',
-          url: `/api/getPosts/comment`,
-          headers: {
-            authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-          success: function (response) {
-            let comments = response['result'];
-            const logedNickname = response['nickname'];
-            console.log(logedNickname)
-            for (let i = 0; i < comments.length; i++) {
-              const nickname = comments[i]['nickname'];
-              const comment = comments[i]['comment'];
-              const id = comments[i]['id'];
-              if(nickname===logedNickname){
-              make_post(nickname, comment, id);
-              }
-              else{
-              make_post_not_loged(nickname, comment, id);  
-              }
+            //    로그인일때 댓글가져오기
+            function get_details() {
+                $('#card-box').empty(); //
+                $.ajax({
+                    type: 'GET',
+                    url: `/api/getPosts/comment/${postId}`,
+                    headers: {
+                        authorization: `Bearer ${localStorage.getItem('token')}`
+                    },
+                    success: function (response) {
+                        let comments = response['result'];
+                        const logedNickname = response['nickname'];
+                        console.log(logedNickname)
+                        for (let i = 0; i < comments.length; i++) {
+                            const nickname = comments[i]['nickname'];
+                            const comment = comments[i]['comment'];
+                            const id = comments[i]['id'];
+                            if (nickname === logedNickname) {
+                                make_post(nickname, comment, id);
+                            } else {
+                                make_post_not_loged(nickname, comment, id);
+                            }
+                        }
+                    }
+                });
             }
-          },
-        });
-      }
-      //    // 비로그인일때 댓글가져오기
-      function not_login_get_details() {
-        $('#card-box').empty(); // .
-        $.ajax({
-          type: 'GET',
-          url: `/api/getPosts/not_login_comment`,
-          data: {},
-          success: function (response) {
-            let posts = response['result'];
-            for (let i = 0; i < posts.length; i++) {
-              const nickname = posts[i]['nickname'];
-              const comment = posts[i]['comment'];
-              const id = posts[i]['id'];
-              make_post_not_loged(nickname, comment, id);
+            //     비로그인일때 댓글가져오기
+            function not_login_get_details() {
+                $('#card-box').empty(); // .
+                $.ajax({
+                    type: 'GET',
+                    url: `/api/getPosts/not_login_comment/${postId}`,
+                    data: {},
+                    success: function (response) {
+                        let posts = response['result'];
+                        for (let i = 0; i < posts.length; i++) {
+                            const nickname = posts[i]['nickname'];
+                            const comment = posts[i]['comment'];
+                            const id = posts[i]['id'];
+                            make_post_not_loged(nickname, comment, id);
+                        }
+                    }
+                });
             }
-          },
-        });
-      }
 
-      //   // 가져온 Posts를 Table Rows로 삽입한다.
-      function make_post(nickname, comment, id) {
-        let temp_html = `
+            //    가져온 Posts를 Table Rows로 삽입한다.
+            function make_post(nickname, comment, id) {
+                let temp_html = `
           <div class="commentWidth alert alert-warning alert-dismissible fade show" role="alert">
       <strong>${nickname}</strong> ${comment}
-      <input type ="text" value="${comment}"><button type="button" onclick="modifyComment(${id})" >
+      <input type ="text" id="${id}" value="${comment}"><button type="button" onclick="modifyComment(${id})" >
        수정
       </button>
-      <button type="button" onclick ="deleteComment(${id})" >삭제</button>
+      <button type="button" onclick ="deleteConfirm(${id})" >삭제</button>
     </div><br>`;
-        $('#card-box').append(temp_html);
-      }
-        //댓글 아이디가 다를때 
-      function make_post_not_loged(nickname, comment, id) {
-        let temp_html = `
+                $('#card-box').append(temp_html);
+            }
+            //댓글 아이디가 다를때
+            function make_post_not_loged(nickname, comment, id) {
+                let temp_html = `
           <div class="commentWidth alert alert-warning alert-dismissible fade show" role="alert">
       <strong>${nickname}</strong> ${comment}
     </div><br>`;
-        $('#card-box').append(temp_html);
-      }
+                $('#card-box').append(temp_html);
+            }
 
+            function posting(postId) {
+                //  const nickname = $('#nickname').text();
+                const comment = $('#comment').val();
+                if (comment !== "") {
+                    $.ajax({
+                        type: 'POST',
+                        url: `/api/posts/comment/${postId}`,
+                        headers: {
+                            authorization: `Bearer ${localStorage.getItem('token')}`
+                        },
+                        data: {
+                            comment
+                        },
+                        success: function (response) {
+                            alert(response.result);
+                            window
+                                .location
+                                .reload();
+                        },
+                        error: function (error) {
+                            alert('로그인이 필요합니다.!');
+                            window.location.href = '/';
+                        }
+                    });
+                } else {
+                    alert("내용을 입력해주세요")
+                }
+            }
+            //댓글 수정
+            function modifyComment(id) {
+                const comment = $(`#${id}`).val();
+                //document.getElementById("dn").value;
+                if (comment !== "") {
+                    $.ajax({
+                        type: 'PUT',
+                        url: `/api/posts/comment/modify/${id}`,
+                        headers: {
+                            authorization: `Bearer ${localStorage.getItem('token')}`
+                        },
+                        data: {
+                            comment
+                        },
+                        success: function (response) {
+                            alert(response.result);
+                            window
+                                .location
+                                .reload();
+                        },
+                        error: function (error) {
+                            alert('로그인이 필요합니다.!');
+                            window.location.href = '/';
+                        }
+                    });
+                } else {
+                    alert("내용을 입력해주세요")
+                }
+            }
 
+            function deleteConfirm(id) {
+                if (confirm("정말 삭제하시겠습니까??") == true) { //확인
+                  deleteComment(id);
+                } else { //취소
+                    return;
+                }
+            }
 
-      function posting() {
-      //  const nickname = $('#nickname').text();
-        const comment = $('#comment').val();
-        if(comment!==""){
-        
-        console.log(comment);
-        $.ajax({
-          type: 'POST',
-          url: '/api/posts/comment',
-          headers: {
-            authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-          data: { comment },
-          success: function (response) {
-            alert(response.result);
-            window.location.reload();
-          },
-          error: function (error) {
-            alert('로그인이 필요합니다.!');
-            window.location.href = '/';
-          },
-        });
-      }else{
-        alert("내용을 입력해주세요")
-      }
-      }
+            function deleteComment(id) {
+                $.ajax({
+                    type: 'DELETE',
+                    url: `/api/posts/comment/delete/${id}`,
+                    headers: {
+                        authorization: `Bearer ${localStorage.getItem('token')}`
+                    },
+                    success: function (response) {
+                        alert(response.result);
+                        window
+                            .location
+                            .reload();
+                    },
+                   
+                });
+            }
+        </script>
 
-      function modifyComment(id){
-        
-        console.log(id);
+        <style>
+            .Dposition {
+                position: absolute;
+                right: 10px;
+            }
+            .Mposition {
+                position: absolute;
+                right: 50px;
+            }
+            .card {
+                cursor: pointer;
+            }
+            html {
+                overflow: auto;
+            }
+            .wrap {
+                width: 700px;
+                margin: 10px auto;
+                padding: 10px;
+            }
+            .location {
+                margin-left: 250px;
+            }
+            .height {
+                height: 180px;
+            }
+            .width {
+                width: 700px;
+                margin: auto;
+            }
+            .commentWidth {
+                width: 600px;
 
-      }
-      function deleteComment(id){
-        $.ajax({
-    type: 'DELETE',
-    url: `/api/goods/${goodsId}/cart`,
-    headers: {
-      authorization: `Bearer ${localStorage.getItem('token')}`,
-    },
-    success: function () {
-      callback();
-    },
-  });
-      }
+                margin: auto;
+            }
+        </style>
+    </head>
 
-    </script>
+    <body>
+        <section class="height hero is-info">
+            <div class="hero-body">
+                <p class="title">게시글 조회 페이지</p>
+                <button class="btn btn-primary" onclick="signOut()">로그아웃</button>
+            </div>
+        </section>
 
-    <style>
-      .Dposition{
-        position: absolute;
-        right: 10px;
-      }
-      .Mposition{
-        position: absolute;
-        right: 50px;
-      }
-      .card {
-        cursor: pointer;
-      }
-      html {
-        overflow: auto;
-      }
-      .wrap {
-        width: 700px;
-        margin: 10px auto;
-        padding: 10px;
-      }
-      .location {
-        margin-left: 250px;
-      }
-      .height {
-        height: 180px;
-      }
-      .width {
-        width: 700px;
-        margin: auto;
-      }
-      .commentWidth {
-        width: 600px;
-       
-        margin: auto;
-      }
-    </style>
-  </head>
+        <div class="card text-center wrap">
+            <div id="nickname" class="card-header"><%= nickname %></div>
+            <div class="card-body">
+                <p class="card-text"><%= content %></p>
+            </div>
+            <div class="card-footer text-muted"><%= createdAt %></div>
+        </div>
 
-  <body>
-    <section class="height hero is-info">
-      <div class="hero-body">
-        <p class="title">게시글 조회 페이지</p>
-        <button class="btn btn-primary" onclick="signOut()">로그아웃</button>
-      </div>
-    </section>
+        <div class="field is-grouped width">
+            <p class="control is-expanded">
+                <input id="comment" class="input" type="text"/>
+            </p>
+            <p class="control">
+                <button onclick="posting(postId)" class="button is-info">댓글입력</button>
+            </p>
+        </div>
 
-    <div class="card text-center wrap">
-      <div id="nickname" class="card-header"><%= nickname %></div>
-      <div class="card-body">
-        <p class="card-text"><%= content %></p>
-      </div>
-      <div class="card-footer text-muted"><%= createdAt %></div>
+        <div id="card-box">
+            <div
+                class="commentWidth alert alert-warning alert-dismissible fade show"
+                role="alert">
+                <strong>작성자</strong>
+                댓글내용
+
+            </button>
+        </div>
     </div>
-
-    <div class="field is-grouped width">
-      <p class="control is-expanded">
-        <input id="comment" class="input" type="text" />
-      </p>
-      <p class="control">
-        <button onclick="posting()" class="button is-info">댓글입력</button>
-      </p>
-    </div>
-
-    <div id="card-box">
-      <div
-        class="commentWidth alert alert-warning alert-dismissible fade show"
-        role="alert"
-      >
-        <strong>작성자</strong> 댓글내용
-        <!-- <button type="button" class="open"> -->
-        <!-- <button type="button" class="open"></button> -->
-        <!-- <button type="button" class="close">
-          <!-- <span aria-hidden="true">&times;</span> -->
-        </button> -->
-      </div>
-    </div>
-  </body>
+</body>
 </html>
