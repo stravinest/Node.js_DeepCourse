@@ -1,7 +1,7 @@
 const express = require("express");
 const Users = require("./router_Users");
 const Login = require("./router_Login");
-const posts = require("./router_posts");
+const posts = require("./router_Posts");
 const Users_me = require("./router_Users_me");
 const GetPosts = require("./router_getPosts");
 

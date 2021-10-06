@@ -1,9 +1,9 @@
 {
   "development": {
-    "username": "root",
-    "password": "1234",
+    "username": "user",
+    "password": "test1234",
     "database": "database_development",
-    "host": "127.0.0.1",
+    "host": "docker-mysql-stravinest.cl3vmkwknsxa.ap-northeast-2.rds.amazonaws.com",
     "dialect": "mysql"
   },
   "test": {
