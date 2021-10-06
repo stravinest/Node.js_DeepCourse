@@ -5,8 +5,6 @@ const boardRouter = require('./board');
 const writeRouter = require('./write');
 const detailRouter = require('./detail');
 
-// const modifyRouter = require("./modify");
-
 const router = express.Router();
 
 router.use('/', mainRouter); // ./main 실행
@@ -14,6 +12,5 @@ router.use('/users', usersRouter); // ./users 실행
 router.use('/board', boardRouter);
 router.use('/write', writeRouter);
 router.use('/detail', detailRouter);
-// router.use("/modify", modifyRouter);
 
 module.exports = router;

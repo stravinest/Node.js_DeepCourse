@@ -30,12 +30,10 @@ router.get('/not_login', async (req, res) => {
 router.get('/comment/:postId', loginMiddleware, async (req, res) => {
   try {
     const {postId} = req.params;
-    console.log(postId)
     const jsonData = await Comment.findAll({
       where:{postId},
       order: [['createdAt', 'ASC']],
     });
-    console.log(postId)
     const { nickname } = res.locals.user;
     res.send({ result: jsonData, nickname: nickname });
   } catch (error) {

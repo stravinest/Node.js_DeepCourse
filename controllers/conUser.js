@@ -13,7 +13,6 @@ exports.validation= async(req,res)=>{
       for (let i = 0; i < str.length; i++) {
         if (nickname.includes(str[i])) {
           includeTest = false;
-          console.log(str[i]);
         }
       }
       if (

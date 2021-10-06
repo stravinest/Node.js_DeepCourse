@@ -11,7 +11,7 @@ const port = 3000;
 // 주소 형식으로 데이터를 보내는 방식
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
-app.use(express.static('./views'));// public
+app.use(express.static('./views'));// views에서 파일 참조 가능
 
 // html을 대체하는 ejs 엔진을 설정
 app.set('views', __dirname + '/views');
@@ -23,3 +23,4 @@ app.use('/', renders);
 app.listen(port, () => {
   console.log(`listening at http://localhost:${port}`);
 });
+
