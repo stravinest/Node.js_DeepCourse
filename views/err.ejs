@@ -27,31 +27,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.4.0/socket.io.js"></script>
 
     <link href="/static/mystyle.css" rel="stylesheet">
-    <title>CRUD 주특기 사전과제</title>
+    <title>에러페이지</title>
     <script>
-        $(document).ready(function () {
-            get_posts()
-        })
-
-        function get_posts(category) {
-            $.ajax({
-                type: "GET",
-                url: `/api/posts`,
-                data: {},
-                success: function (response) {
-                    //카테고리에 해당하는 goods를 가지고 온다.
-                    let posts = response["result"]
-                    for (let i = 0; i < posts.length; i++) {
-                        const postId = posts[i]['postId']
-                        const user = posts[i]['user']
-                        const title = posts[i]['title']
-                        make_view(postId, user, title)
-                    }
-                }
-            })
-        }
-
-
+       
     </script>
     <style>
         .card {
@@ -69,7 +47,7 @@
 <nav class="navbar navbar-expand-sm navbar-dark bg-sparta justify-content-end">
     <a class="navbar-brand" href="/">
         <img src="/static/logo_big_tr.png" width="30" height="30" class="d-inline-block align-top" alt="">
-        스파르타 게시판
+        에러페이지
     </a>
     <button class="navbar-toggler ml-auto" type="button" data-toggle="collapse"
             data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="true"
@@ -78,9 +56,7 @@
         <ul class="navbar-nav mr-auto text-right">
             <li class="nav-item" id="link-cart">
 
-                <a class="nav-link" href="/write">
-                    게시글 작성
-                </a>
+                
 
             </li>
 
@@ -94,7 +70,7 @@
         <div class="d-flex justify-content-between align-items-end">
             <div>
                 <div>
-                    <h3 id="word" style="display: inline;">게시글이 존재하지 않습니다.</h3>
+                    <h3 id="word" style="display: inline;">에러페이지</h3>
                 </div>
             </div>
         </div>

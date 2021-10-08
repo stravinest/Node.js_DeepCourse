@@ -1,10 +1,10 @@
 const express = require('express');
-const loginMiddleware = require('../middlewares/login-middleware');
+const authMiddleware = require('../middlewares/authMiddleware');
 const { Post, Comment } = require('../models');
 const router = express.Router();
 
 // 모든 게시글 데이터를 반환하는 함수
-router.get('/', loginMiddleware, async (req, res) => {
+router.get('/', authMiddleware, async (req, res) => {
   try {
     const jsonData = await Post.findAll({ order: [['createdAt', 'DESC']] });
 
@@ -27,7 +27,7 @@ router.get('/not_login', async (req, res) => {
 });
 
 //댓글 뿌려주기
-router.get('/comment/:postId', loginMiddleware, async (req, res) => {
+router.get('/comment/:postId', authMiddleware, async (req, res) => {
   try {
     const {postId} = req.params;
     const jsonData = await Comment.findAll({

@@ -1,10 +1,10 @@
 const express = require('express');
-const loginMiddleware = require('../middlewares/login-middleware');
+const authMiddleware = require('../middlewares/authMiddleware');
 const { Post, Comment } = require('../models');
 const router = express.Router();
 
 //개시글 생성
-router.post('/', loginMiddleware, async (req, res) => {
+router.post('/', authMiddleware, async (req, res) => {
   try {
     const { password, content } = req.body;
 
@@ -19,7 +19,7 @@ router.post('/', loginMiddleware, async (req, res) => {
 });
 
 //댓글 생성
-router.post('/comment/:postId', loginMiddleware, async (req, res) => {
+router.post('/comment/:postId', authMiddleware, async (req, res) => {
   try {
     const { comment } = req.body;
     const postId = req.params.postId;
@@ -34,7 +34,7 @@ router.post('/comment/:postId', loginMiddleware, async (req, res) => {
 });
 
 //게시글 수정
-router.put('/comment/modify/:id', loginMiddleware, async (req, res) => {
+router.put('/comment/modify/:id', authMiddleware, async (req, res) => {
   try {
     const id = req.params.id;
     const comment = req.body['comment'];
