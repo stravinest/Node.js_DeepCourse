@@ -65,6 +65,7 @@
 Back end
 <li>Mysql
 <li>Node.js
+<li>sequelize
 
 Front end
  <li>JQuery
