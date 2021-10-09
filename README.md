@@ -70,9 +70,10 @@ Back end
 Front end
  <li>JQuery
  <li>Bootstrap
+ <li>ejs
 
 deploy
  <li>AWS EC2
-   
+ <li>RDS MySQL  
    <h2>실행화면 주소</h2>
  stravinest.shop 
