@@ -18,7 +18,7 @@ exports.authValidation = async (req, res) => {
       return;
     }
     res.send({
-      token: jwt.sign({ id: user.id }, process.env.SECRET_KEY),
+      token: jwt.sign({ id: user.id }, process.env.SECRET_KEY || 'secret'),
     });
   } catch (error) {
     console.log(`${req.method}실패인가 ${req.originalUrl} : ${error.message}`);

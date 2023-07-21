@@ -12,7 +12,7 @@ module.exports = (req, res, next) => {
     return;
   }
   try {
-    const { id } = jwt.verify(tokenValue, process.env.SECRET_KEY);
+    const { id } = jwt.verify(tokenValue, process.env.SECRET_KEY|| 'secret');
     User.findByPk(id).then((user) => {
       res.locals.user = user; // 이 미들웨어를 사용하는곳 어디에서든 사용할수 있어서 매우 편리하다
       next();
